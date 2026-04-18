@@ -1,12 +1,12 @@
-name: Terraform Transit Gateway Module
+name: terraform-module-azurerm-mysql-database
 #logo: logo/logo.jpg
 badges:
   - name: Latest Release
-    image: https://img.shields.io/github/release/<owner/repo>.svg?style=for-the-badge
-    url: https://github.com/<owner/repo>/releases/latest
+    image: https://img.shields.io/github/release/cloudopsworks/terraform-module-azurerm-mysql-database.svg?style=for-the-badge
+    url: https://github.com/cloudopsworks/terraform-module-azurerm-mysql-database/releases/latest
   - name: Last Updated
-    image: https://img.shields.io/github/last-commit/<owner/repo>.svg?style=for-the-badge
-    url: https://github.com/<owner/repo>/commits
+    image: https://img.shields.io/github/last-commit/cloudopsworks/terraform-module-azurerm-mysql-database.svg?style=for-the-badge
+    url: https://github.com/cloudopsworks/terraform-module-azurerm-mysql-database/commits
 
 license: "APACHE2"
 
@@ -15,23 +15,95 @@ copyrights:
     url: "https://cloudopsworks.co"
     year: "2026"
 
-github_repo: <owner/repo>
+github_repo: cloudopsworks/terraform-module-azurerm-mysql-database
 
 description: |-
-  <description>
+  Terraform module that provisions an Azure MySQL Flexible Server with Key Vault credential storage and optional Hoop connection output.
 
 # Introduction to the project
 introduction: |-
-#  This is an introduction.
+  This module provisions an Azure MySQL Flexible Server using the `azurerm_mysql_flexible_server` resource.
+  It creates a dedicated resource group, generates a random admin password stored in Azure Key Vault,
+  creates an initial database, and supports additional databases, server configuration parameters,
+  firewall rules, VNet injection, high availability, and optional Hoop connection output for both
+  community and enterprise modes.
 
 # How to use this project
 usage: |-
+  ```hcl
+  # terragrunt.hcl
+  inputs = {
+    settings = {
+      name_prefix           = "mydb"        # (Required) Name prefix for the server resource.
+      database_name         = "mydb"        # (Optional) Initial database name. Default: "mysql".
+      administrator_login   = "adminuser"   # (Optional) Admin username. Default: "adminuser".
+      version               = "8.0.21"      # (Required) MySQL version. Possible values: 5.7, 8.0.21.
+      sku_name              = "B_Standard_B1ms" # (Required) Compute SKU.
+      storage_mb            = 20480         # (Optional) Storage size in MB. Default: 20480.
+      storage_iops          = 396           # (Optional) Storage IOPS. Default: 396.
+      storage_auto_grow     = "Enabled"     # (Optional) Enabled or Disabled. Default: Enabled.
+      backup_retention_days = 7             # (Optional) Backup retention days 1-35. Default: 7.
+      geo_redundant_backup  = "Disabled"    # (Optional) Enabled or Disabled. Default: Disabled.
+      zone                  = ""            # (Optional) Availability zone. Default: "".
+      high_availability = {
+        enabled      = false            # (Optional) Enable HA. Default: false.
+        mode         = "ZoneRedundant"  # (Optional) SameZone or ZoneRedundant. Default: ZoneRedundant.
+        standby_zone = ""               # (Optional) Standby AZ. Default: "".
+      }
+      maintenance = {
+        day_of_week  = 0  # (Optional) 0=Sunday..6=Saturday. Default: 0.
+        start_hour   = 0  # (Optional) 0-23 UTC. Default: 0.
+        start_minute = 0  # (Optional) 0-59. Default: 0.
+      }
+      databases = {}   # (Optional) Map of additional databases: {key: {name, charset, collation}}.
+      parameters = []  # (Optional) List of {name, value} server configuration parameters.
+      hoop = {
+        enabled        = false  # (Optional) Generate hoop_connections output. Default: false.
+        agent_id       = ""     # (Required when enabled) Hoop agent UUID.
+        community      = true   # (Optional) true=community (null output), false=enterprise. Default: true.
+        import         = false  # (Optional) Import existing Hoop connection. Default: false.
+        tags           = {}     # (Optional) Tags map.
+        access_control = []     # (Optional) Access control groups.
+      }
+    }
+
+    network = {
+      delegated_subnet_id   = ""    # (Optional) Subnet for VNet injection.
+      private_dns_zone_id   = ""    # (Optional) Required with delegated_subnet_id.
+      public_network_access = true  # (Optional) Allow public access. Default: true.
+      firewall_rules = [
+        # { name = "office", start_ip = "203.0.113.0", end_ip = "203.0.113.255" }
+      ]
+    }
+
+    key_vault_name                = "my-key-vault"    # (Required) Key Vault name.
+    key_vault_resource_group_name = "my-kv-rg"        # (Required) Key Vault resource group.
+  }
+  ```
 
 # Example usage
 examples: |-
+  ```hcl
+  # Minimal example — basic MySQL server with community Hoop mode
+  inputs = {
+    settings = {
+      name_prefix = "app"
+      version     = "8.0.21"
+      sku_name    = "B_Standard_B1ms"
+    }
+    network                       = {}
+    key_vault_name                = "prod-keyvault"
+    key_vault_resource_group_name = "prod-shared-rg"
+  }
+  ```
 
 # How to get started quickly
 quickstart: |-
+  1. Initialize the module: `make init/azurerm`
+  2. Configure your `inputs` block in `terragrunt.hcl` using the usage example above.
+  3. Set `key_vault_name` and `key_vault_resource_group_name` to an existing Key Vault.
+  4. Run `terragrunt plan` to review the resources that will be created.
+  5. Run `terragrunt apply` to provision the MySQL Flexible Server.
 
 include:
   - "docs/targets.md"
