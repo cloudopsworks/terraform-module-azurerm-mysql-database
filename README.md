@@ -160,8 +160,8 @@ Available targets:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 4.59 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.4 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 4.69.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.8.1 |
 
 ## Modules
 
@@ -226,21 +226,19 @@ File a GitHub [issue](https://github.com/cloudopsworks/terraform-module-azurerm-
 
 
 ## DevOps Tools
-[]()
+[Our Products](https://cloudopsworks.co/products/)
+[CI/CD Blueprint](https://cloudopsworks.co/cicd-blueprint/)
+[Open Source](https://cloudopsworks.co/open-source/)
+
 ## Slack Community
 
 
 ## Newsletter
-
-## Office Hours
-
-## Contributing
+[Resources Directory](https://cloudopsworks.co/resources/)
 
 ### Bug Reports & Feature Requests
 
 Please use the [issue tracker](https://github.com/cloudopsworks/terraform-module-azurerm-mysql-database/issues) to report any bugs or file feature requests.
-
-### Developing
 
 
 
@@ -331,4 +329,4 @@ This project is maintained by [Cloud Ops Works LLC][website].
   [share_reddit]: https://reddit.com/submit/?url=https://github.com/cloudopsworks/terraform-module-azurerm-mysql-database
   [share_facebook]: https://facebook.com/sharer/sharer.php?u=https://github.com/cloudopsworks/terraform-module-azurerm-mysql-database
   [share_email]: mailto:?subject=terraform-module-azurerm-mysql-database&body=https://github.com/cloudopsworks/terraform-module-azurerm-mysql-database
-  [beacon]: https://ga-beacon.cloudospworks.co/G-QMZVYYN2VN/cloudopsworks/terraform-module-azurerm-mysql-database?pixel&cs=github&cm=readme&an=terraform-module-azurerm-mysql-database
+  [beacon]: https://ga-beacon.cloudopsworks.co/G-QMZVYYN2VN/cloudopsworks/terraform-module-azurerm-mysql-database?pixel&cs=github&cm=readme&an=terraform-module-azurerm-mysql-database
